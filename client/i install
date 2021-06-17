@@ -1,0 +1,9 @@
+jwt-decode 
+react-google-login
+npm install react-facebook-login --legacy-peer-deps //https://stackoverflow.com/questions/65549858/eresolve-unable-to-resolve-dependency-tree-when-installing-npm-react-facebook
+immer * not in use
+
+
+לעשות:
+
+בתיקית פובליק  בינדקס לשנות את השם של הטיטל (כנראה בשורה 27) מה שישנה את השם של הטב בכרום
