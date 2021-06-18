@@ -41,7 +41,7 @@ export default function Dashboard() {
         socketRef.current.on('roomList', (Data) => setRoomList(Data));
         socketRef.current.on('NewMessage', (Data) => addMessage(message => [...message, Data]));
         socketRef.current.on('updateMessages', (Data) => setTempData(Data));
-        socketRef.current.on('setMessages', (Data) => addMessage(Data));
+        socketRef.current.on('setMessages', (Data) => {addMessage(Data);console.log("ddd " + message.length)});
 
     }, []);
     /*  useEffect(() =>{
@@ -110,7 +110,7 @@ export default function Dashboard() {
                                 creatorEmail: JSON.parse(localStorage.getItem('profile')).result.email,
                                 room: room,
                                 msg:room?.users.findIndex(x=>x==user.result.email)>-1 ? ( textValue):(`Can i join the grope plases? `),
-                                toAdmin:!room?.users.findIndex(x=>x==user.result.email)>-1,     
+                                toAdmin:!(room?.users.findIndex(x=>x==JSON.parse(localStorage.getItem('profile')).result.email)>-1),     
                                 image: { img: file ? file : "", mime: file ? file.type : "", name: file ? file.name : "" }, likes: [], dislikes: [], time: moment().format('YYYY-MM-DD HH:mm:ss')
                             }) : infoMessage("Make sure that you login and enter a Room")
                     }

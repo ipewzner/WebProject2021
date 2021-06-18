@@ -11,8 +11,8 @@ const koko = (io, socket) => {
         console.log("User try to joined room: " + JSON.stringify(Data) + " socket.id " + socket.id);
         socket.join(Data.room.name);
         try {
-            const messages = await massges.find({ room: Data._id});
-            messages.reduce((msg)=>{msg.toAdmin&&!Data.room.users.findIndex(x=>x==user)>-1});
+            const messages = await massges.find({ room: Data.room._id});
+            await messages.reduce((msg)=>{msg.toAdmin&&!Data.room.users.findIndex(x=>x==user)>-1});
             messages.forEach((msg) => {
                 //if msg for admin && you the admin
            //     if (msg.toAdmin&&!Data.room.users.findIndex(x=>x==user)>-1);
@@ -127,7 +127,7 @@ const koko = (io, socket) => {
             });
             socket.emit('info', "User join to the room!");
         } catch (e) { console.log("----//---" + e + "----//---"); }
-
+        deleteMessage(Data);
         //socket.to(Data.room.admin).emit("AdminJoinRoomRequest",Data);
     }
 

@@ -14,7 +14,7 @@ export default function AlertDialog(props) {
     const handleClose = () => { setOpen(false); };
     const handleSubmit = (e) => {
         e.preventDefault();
-        setGroupData({ ...groupData, admin: JSON.parse(localStorage.getItem('profile')).result.email});
+        setGroupData({ ...groupData, admin: JSON.parse(localStorage.getItem('profile')).result.email, users: JSON.parse(localStorage.getItem('profile')).result.email});
         console.log("groupData: " + JSON.stringify(groupData));
         if(groupData.name!=""&&groupData.admin!=''){
         socket.emit('setNewGrupe', groupData);

@@ -24,7 +24,7 @@ const Message = (props) => {
         <Card className={classes.card}>
             <div className={classes.overlay}>
                 <CardActions className={classes.cardActions}>
-                    <Typography variant="h10">{message.creatorName}</Typography>
+                    <Typography variant="h6">{message.creatorName}</Typography>
                     <Typography variant="body2">{message.time}</Typography>
                 </CardActions>
             </div>
@@ -43,7 +43,8 @@ const Message = (props) => {
             </CardContent>
 
             <CardActions className={classes.cardActions}>
-            {message.toAdmin?(<Button size="small" color="primary" onClick={() => socket.emit('approvedJoinRoomRequest', { 'user': user, 'message': message })}>Yes</Button>):null}
+            {message.toAdmin?(<Button size="small" color="primary" onClick={() => socket.emit('approvedJoinRoomRequest', { 'user': user, 'message': message })}>
+                Yes</Button>):null}
               
                 <Button size="small" color="primary" onClick={() => socket.emit('likeMessage', { 'user': user, 'message': message })}>
                     <ThumbUpAlt fontSize="small" />
