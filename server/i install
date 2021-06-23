@@ -1,1 +1,9 @@
 npm install socket.io
+
+cookie-parser';
+'express-session'; 
+ 'passport';
+connect-mongo
+ nodemailer
+googleapis
+bcrypt-nodejs

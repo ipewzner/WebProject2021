@@ -36,3 +36,4 @@ export const signup = async (req, res) => {
 }
 
 export const forgetPassword = async (req, res) => {res.status(200).json({ message: 'working?' });}
+
