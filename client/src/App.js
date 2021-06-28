@@ -1,4 +1,4 @@
-import React  from 'react';
+import React,{useContext}  from 'react';
 import { Container} from '@material-ui/core';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
@@ -9,10 +9,10 @@ import About from './components/About/About';
 import store from './components/store/store';
 import Blogs from './components/Blogs/Blogs';
 import Chat from './components/Chat/Chat';
- 
+  import {myContext} from './Context';
 
-const App = () => {
-
+const App = () => { 
+const userObject =useContext(myContext);
     return (
         <BrowserRouter>    
             <Container maxWidth='lg'>

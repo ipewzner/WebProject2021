@@ -25,8 +25,9 @@ const app = express();
     origin: ["http://localhost:4000"],
     credentials: true
   }));
+
   app.use(session({
-  //  name: 'users.sid',         // the name of session ID cookie
+    name: 'users.sid',         // the name of session ID cookie
     secret: secret,            // the secret for signing the session ID cookie - mandatory option
     resave: false,             // do we need to resave unchanged session? (only if touch does not work)  - mandatory option
     saveUninitialized: true,  // do we need to save an 'empty' session object? - mandatory option
@@ -48,6 +49,10 @@ const app = express();
   app.use((req, res, next) => {
     console.log("---- Middleware ----");
     console.log(req.session);
+    console.log("req.user--------");
+    console.log(req.user);
+    console.log("req body------");
+    console.log(req.body);
     console.log("---- Middleware end ----");
     next();
   });
@@ -67,7 +72,7 @@ const app = express();
   const io = new Server(server, {
     cors: {
       origin: "http://localhost:4000",
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST","AUTH"],
       transports: ['websocket', 'polling']
     },
   });

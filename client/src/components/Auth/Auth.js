@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
 import Input from './Input';
-import { signup, signin, forgetPassword, resetPassword } from '../../actions/auth';
+import { signup, signin, forgetPassword, resetPassword ,testFacebook,testGoogle,googleTest2} from '../../actions/auth';
 import GoogleLogin, { googleLogin } from 'react-google-login';
 //import FacebookLogin from 'react-facebook-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'   //https://www.youtube.com/watch?v=ZqDeyzXNOoE  //facebook login 
@@ -47,7 +47,8 @@ export default function Auth() {
         const result = res?.profileObj;
         const token = res?.tokenId;
         try {
-            dispatch({ type: 'AUTH', data: { result, token } });
+       dispatch(googleTest2({ result, token },history));
+         //    dispatch({ type: 'AUTH', data: { result, token } });
             history.push('/');
         } catch (err) { console.log(err); }
     };
@@ -56,11 +57,20 @@ export default function Auth() {
     const FacebookFailure = (error) => { console.log('Facebook Sign In was unsuccessful. Try again later. ' + error) };
     const responseFacebook = (response) => { console.log(response); }
 
+const test=()=> {//
+   // dispatch(testFacebook());
+    window.open("https://localhost:5000/auth/facebookLogin", "_self");
+}
+
+const googleLogin1 = () => {
+   window.open("http://localhost:5000/auth/google", "_self");
+}
+
     return (
         <Container component="main" maxWidth="xs">
             <Paper className={classes.paper} elevation={3}>
                 <Avatar className={classes.avatar}><LockOutlinedIcon /></Avatar>
-                <Typography variant="h5>">{
+                <Typography variant="h5">{
                     {
                         'forgetPassword': "Send new password",
                         'SignUp': 'Sign Up',
@@ -68,9 +78,12 @@ export default function Auth() {
                         'resetPassword': 'Reset password'
                     }[mode]
                 }</Typography>
+<Button  fullWidth variant="contained" color="primary" onClick={()=>test()}>test Facebook</Button>  
+<Button  fullWidth variant="contained" color="primary" onClick={()=>googleLogin1()}>test Google</Button>  
+
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
-                        {mode == 'SignUp' && (
+                        {mode === 'SignUp' && (
                             <>
                                 <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
                                 <Input name="lastName" label="Last Name" handleChange={handleChange} half />

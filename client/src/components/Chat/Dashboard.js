@@ -74,7 +74,7 @@ export default function Dashboard() {
                                 roomList.length > 0 ? roomList.map((topic, i) => (
                                     <ListItem key={i} button onClick={(e) => {
                                         setRoom(roomList[i]);
-                                        socketRef.current.emit('setRoom',{room: roomList[i],user:user.result.email});
+                                        socketRef.current.emit('setRoom',{room: roomList[i],user:user?.email});
                                     }}>
                                         <ListItemText primary={topic?.name} />
                                     </ListItem>
@@ -93,12 +93,12 @@ export default function Dashboard() {
                     </div>
                 </div>
                 <div className={classes.flex}>
-                    {room?.users.findIndex(x=>x==user.result.email)>-1? (
+                    {room?.users.findIndex(x=>x==user?.email)>-1? (
                         <TextField label="send message" className={classes.chatBox} value={textValue} onChange={e => changeTextValue(e.target.value)} />
                     ) : null}
 
                     <input color="primary" accept="image/*" type="file" onChange={(e) => setFile(e.target.files[0])} id="icon-button-file" style={{ display: 'none', }} />
-                    <label htmlFor="icon-button-file" hidden={!(room?.users.findIndex(x=>x==user.result.email)>-1)}>
+                    <label htmlFor="icon-button-file" hidden={!(room?.users.findIndex(x=>x==user?.email)>-1)}>
                         <Button component="span" className={classes.button} size="small" color="primary">
                             <AddPhotoAlternateIcon />
                         </Button>
@@ -106,15 +106,15 @@ export default function Dashboard() {
 
                    {/* <Button variant="contained" onClick={(e) => socketRef.current.emit('infoMsgTest')} color="primary">infoMsgTest</Button>*/} <Button variant="contained" onClick={(e) => {
                             (room && user) ? socketRef.current.emit('sendMessage', {
-                                creatorName: JSON.parse(localStorage.getItem('profile')).result.name,
-                                creatorEmail: JSON.parse(localStorage.getItem('profile')).result.email,
+                                creatorName: JSON.parse(localStorage.getItem('profile'))?.name,
+                                creatorEmail: JSON.parse(localStorage.getItem('profile')).email,
                                 room: room,
-                                msg:room?.users.findIndex(x=>x==user.result.email)>-1 ? ( textValue):(`Can i join the grope plases? `),
-                                toAdmin:!(room?.users.findIndex(x=>x==JSON.parse(localStorage.getItem('profile')).result.email)>-1),     
+                                msg:room?.users.findIndex(x=>x==user?.email)>-1 ? ( textValue):(`Can i join the grope plases? `),
+                                toAdmin:!(room?.users.findIndex(x=>x==JSON.parse(localStorage.getItem('profile'))?.email)>-1),     
                                 image: { img: file ? file : "", mime: file ? file.type : "", name: file ? file.name : "" }, likes: [], dislikes: [], time: moment().format('YYYY-MM-DD HH:mm:ss')
                             }) : infoMessage("Make sure that you login and enter a Room")
                     }
-                    } color="primary">{room?.users.findIndex(x=>x==user.result.email)>-1 ? "send" : "Send request to join this room"}</Button>
+                    } color="primary">{room?.users.findIndex(x=>x==user?.email)>-1 ? "send" : "Send request to join this room"}</Button>
                 </div>
             </Paper>
             {/*   <NewGroupForm socket={socketRef.current} user={user} trigger={newGroup} setTrigger={setNewGroup} ></NewGroupForm>

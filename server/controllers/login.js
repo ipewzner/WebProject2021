@@ -20,12 +20,9 @@ router.get('/', async (req, res) => {
     else res.redirect('/');
 });
 
-router.post('/', passport.authenticate('local', { failureRedirect: '/login-failure', successRedirect: '/login/login-success' }));
+router.post('/', passport.authenticate('local', { failureRedirect: '/login-failure', successRedirect: '/auth/login-success' }));
 
-router.get('/login-success', (req, res, next) => {
-    // res.send('<p>You successfully logged in. --> <a href="/protected-route">Go to protected route</a></p>');
-    res.redirect(req.session.referer);
-});
+router.get('/login-success', (req, res, next) => {res.redirect(req.session.referer);});
 
 router.get('/login-failure', (req, res, next) => {
     res.send('You entered the wrong password.');
