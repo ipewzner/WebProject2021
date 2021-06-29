@@ -16,7 +16,7 @@ export default function Input({ name,handleChange,label,half,autoFocus,type,hand
                 label={label}
                 autoFocus={autoFocus}
                 type={type}
-                InputProps={name === 'password' ? { 
+                InputProps={name === 'password'||name ==='confirmPassword' ? { 
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton onClick={handleShowPassword}>

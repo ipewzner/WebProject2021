@@ -7,27 +7,69 @@ import { getRoomList, setRoom, sendMessage, setNewGrupe,
 */
 const koko = (io, socket) => {
 
-    const setRoom = async (Data) => {
-        console.log("User try to joined room: " + JSON.stringify(Data) + " socket.id " + socket.id);
-        socket.join(Data.room.name);
+    //----------------------------------
+    let users = [];
+
+    socket.on("join server", async (userName, cb) => {
+        console.log("*************join server:");
+        const user = { userName, id: socket.id };
+        console.log("join server: " + JSON.stringify(userName.email));
+        users.push(user);
+        console.log("users: " + JSON.stringify(users));
+        io.emit("new user", users);
+        let roomList = [];
+        try { roomList = await Rooms.find({ approved: true }); }
+        catch (e) { console.log("----//---" + e + "----//---"); }
+        cb(roomList);
+    });
+    socket.on('join room', async(data, cb) => {
+        console.log("join room: " + data.room.name);
+        socket.join(data.room.name);
+        cb(await Message(data));
+    });
+
+    //socket.on('send message',({})) TODO
+
+    socket.on('disconnect', async (u) => {
+        users = users.filter(u = u.id !== socket.id);
+        io.emit('new user', users);
+    });
+
+    //----*----------
+
+    const Message = async (data) => {
+        console.log("sendMessage for room: " + data.room.name);
+        let messages = [];
         try {
-            const messages = await massges.find({ room: Data._id});
-            messages.reduce((msg)=>{msg.toAdmin&&!Data.room.users.findIndex(x=>x==user)>-1});
+            messages = await massges.find({ room:data.room._id });
+           if( data.room.admin!==data.user && messages.length>0 )
+               messages = await messages.filter(msg => !msg.toAdmin);
+            
             messages.forEach((msg) => {
-                //if msg for admin && you the admin
-           //     if (msg.toAdmin&&!Data.room.users.findIndex(x=>x==user)>-1);
-                console.log("msg.image.img = " + msg.image.img);
-                // delete msg.image;
+            //    console.log("msg.image.img = " + msg.image.img);
                 if (msg.image.mime != "" && msg.image.mime != "url") msg.image.img = fs.readFileSync(msg.image.img, { encoding: 'base64' });
             });
-            socket.emit('setMessages', messages);
         }
         catch (e) { console.log(e); }
-        console.log("User joined room: " + Data + " socket.id " + socket.id);
+      //  console.log(messages);
+        return messages;
+    }
+    
+    const search = async (data,cb) => {
+        console.log("data "+data.search)
+        let messages = [];
+        messages = await Message({room:data.room,user:data.user});
+        messages = messages.filter(msg =>msg.msg.search(data.search)>-1);
+        cb(messages);
     }
 
+    //----------------------------------
+  
+    //--------------------------------
+
     const sendMessage = async (Data) => {
-        console.log("****** 0.2 ******");
+
+        console.log("****** 0.2 ******users "+JSON.stringify(users));
         if (Data.image.mime != "" && Data.image.mime != "url") {
             fs.writeFile('./public/images/' + Data.image.name, Data.image.img, (err) => console.log(err ? err : "success"));
             let filePath = "./public/images/" + Data.image.name;
@@ -51,13 +93,15 @@ const koko = (io, socket) => {
     const setNewGrupe = async (Data) => {
         console.log("------------------"); console.log("setNewGrupe: " + Data); console.log("------------------");
         try {
-            if(Data.admin.length<1){socket.emit('info', "Error: Try to login again."); return 0;}
-            if(Data.name.length<1){socket.emit('info', "Error: Name mest be longer."); return 0;}
+            if (Data.admin.length < 1) { socket.emit('info', "Error: Try to login again."); return 0; }
+            if (Data.name.length < 1) { socket.emit('info', "Error: Name mest be longer."); return 0; }
             const newRoom = new Rooms(Data);
             console.log("newRoom: " + newRoom); console.log("Data: " + Data);
             await newRoom.save().then(() => socket.emit('info', "New room created"));
-        } catch (err) { socket.emit('info', "Error: fail to open new grupe.");
-            console.log("--*** ERR ***--"); console.log(err); console.log("--*** ERR ***--"); }
+        } catch (err) {
+            socket.emit('info', "Error: fail to open new grupe.");
+            console.log("--*** ERR ***--"); console.log(err); console.log("--*** ERR ***--");
+        }
     }
 
     const deleteMessage = async (Data) => {
@@ -114,15 +158,11 @@ const koko = (io, socket) => {
         })
     }
 
-    const getRoomList = async (Data) => {
-        try { socket.emit('roomList', await Rooms.find({approved:true})); }
-        catch (e) { console.log("----//---" + e + "----//---"); }
-    }
 
     const approvedJoinRoomRequest = async (Data) => {
         console.log("approvedJoinRoomRequest")
         try {
-            Rooms.update({ _id: Data.message.room }, { $push: { users:Data.message.creatorEmail } }, function (err, docs) {
+            Rooms.update({ _id: Data.message.room }, { $push: { users: Data.message.creatorEmail } }, function (err, docs) {
                 err ? console.log(err) : console.log("approvedJoinRoomRequest : ", docs);
             });
             socket.emit('info', "User join to the room!");
@@ -131,8 +171,7 @@ const koko = (io, socket) => {
         //socket.to(Data.room.admin).emit("AdminJoinRoomRequest",Data);
     }
 
-    socket.on("getRoomList", getRoomList);
-    socket.on("setRoom", setRoom);
+    socket.on("search", search);
     socket.on("sendMessage", sendMessage);
     socket.on("setNewGrupe", setNewGrupe);
     socket.on("deleteMessage", deleteMessage);

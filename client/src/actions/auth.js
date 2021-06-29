@@ -24,3 +24,11 @@ export const forgetPassword = (formData, history) => async (dispatch) => {
         history.push('/');
         } catch (err) { console.log(err);}
 }
+
+export const resetPassword = (formData, history) => async (dispatch) => {
+    try {
+        const { data } = await api.forgetPassword(formData);
+        dispatch({ type: AUTH,  data});
+        history.push('/');
+        } catch (err) { console.log(err);}
+}

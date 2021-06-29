@@ -14,6 +14,7 @@ export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 export const signin = (formData) => API.post("/users/signin", formData);
 export const signup = (formData) => API.post("/users/signup", formData);
 export const forgetPassword = (formData) => API.post("/users/forgetPassword", formData);
+export const resetPassword = (formData) => API.post("/users/resetPassword", formData);
 
 //TO-DO
 export const fetchProdect = () => API.get('/posts');
