@@ -5,13 +5,11 @@ import {
   getProductById,
   deleteProduct,
   createProduct,
-  updateProduct,
-  createProductReview
+  updateProduct
 } from '../controllers/product.js'
 import auth from '../middleware/auth.js'
 
-router.route('/').get(getProducts).post(auth, createProduct)
-router.route('/:id/reviews').post(auth, createProductReview)
+router.route('/').get(getProducts).post(createProduct)
 router
   .route('/:id')
   .get(getProductById)

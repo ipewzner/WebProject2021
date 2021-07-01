@@ -1,9 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
+import connectDB from './db.js';
 import cors from 'cors';
 import { Server } from "socket.io";
 import koko from './routes/chat.js';
+
 
 const app = express(); 
 
@@ -19,7 +20,7 @@ app.use('/posts', postRoutes);
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
 
-mongoose.connect('mongodb://localhost/flowerShop');
+connectDB();
 const PORT = process.env.PORT || 5000;
 const server =app.listen(PORT,()=>console.log(`Server running on port: ${PORT}`));
 //app.use('/chat', chatRoutes);
