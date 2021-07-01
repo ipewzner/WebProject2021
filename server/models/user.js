@@ -4,8 +4,8 @@ const userSchema = mongoose.Schema({
     email: {type: 'string',required: true},
     password: {type: 'string',required: true},
     id: {type: 'string'},
-    resetToken:String,
-    expireToken:String,
+    resetToken:{type: 'string',default:''},
+    expireToken:{type: 'string'},
 })
 
 export default mongoose.model("User", userSchema);

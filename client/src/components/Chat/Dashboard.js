@@ -36,7 +36,7 @@ export default function Dashboard() {
             methods: ["GET", "POST"],
         });
         // socketRef.current.on("connect", () => socketRef.current.emit("getRoomList"))
-        socketRef.current.on("connect", () => socketRef.current.emit("join server", user.result, (Data) => setRoomList(Data)));
+        socketRef.current.on("connect", () => socketRef.current.emit("join server", user, (Data) => setRoomList(Data)));
         socketRef.current.on("your id", id => { setYourID(id); })
         socketRef.current.on('info', (Data) => { setInfoMsg(Data); })
         socketRef.current.on('roomList', (Data) => setRoomList(Data));
@@ -128,7 +128,8 @@ export default function Dashboard() {
                             room: room,
                             msg: room?.users.findIndex(x => x == user.result.email) > -1 ? (textValue) : (`Can i join the grope plases? `),
                             toAdmin: !(room?.users.findIndex(x => x == user.result.email) > -1),
-                            image: { img: file ? file : "", mime: file ? file.type : "", name: file ? file.name : "" }, likes: [], dislikes: [], time: moment().format('YYYY-MM-DD HH:mm:ss')
+                            image: { img: file ? file : "", mime: file ? file.type : "", name: file ? file.name : "" },
+                            likes: [], dislikes: [], time: moment().format('YYYY-MM-DD HH:mm:ss')
                         }) : infoMessage("Make sure that you login and enter a Room")
                     }
                     } color="primary">{room?.users.findIndex(x => x == user.result.email) > -1 ? "send" : "Send request to join this room"}

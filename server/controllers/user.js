@@ -37,14 +37,12 @@ export const signup = async (req, res) => {
 }
 
 export const resetPassword = async (req, res, next) => {
-    const { resetToken, password } = req.body;
+    const { resetToken, password ,confirmPassword} = req.body;
+    if (password != confirmPassword) return res.status(403).json({ message: "Passwords don't match." });
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-    User.updateOne({ resetToken }, { $set: { password: password } }, async (err, success) => {
-        if (err) res.status(400).json({ error: "reset link error" });
-        else {
-            await sendMail(user.email, html);
-            res.json({ message: "email send." });
-        }
+    User.updateOne({ resetToken: resetToken}, { $set: { password: hashedPassword } }, async (err, success) => {
+        err? res.status(400).json({ error: "reset link error" }):res.status(200);
     })
 }
 

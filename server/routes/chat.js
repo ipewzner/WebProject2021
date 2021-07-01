@@ -22,7 +22,7 @@ const koko = (io, socket) => {
         catch (e) { console.log("----//---" + e + "----//---"); }
         cb(roomList);
     });
-    socket.on('join room', async(data, cb) => {
+    socket.on('join room', async (data, cb) => {
         console.log("join room: " + data.room.name);
         socket.join(data.room.name);
         cb(await Message(data));
@@ -41,35 +41,35 @@ const koko = (io, socket) => {
         console.log("sendMessage for room: " + data.room.name);
         let messages = [];
         try {
-            messages = await massges.find({ room:data.room._id });
-           if( data.room.admin!==data.user && messages.length>0 )
-               messages = await messages.filter(msg => !msg.toAdmin);
-            
+            messages = await massges.find({ room: data.room._id });
+            if (data.room.admin !== data.user && messages.length > 0)
+                messages = await messages.filter(msg => !msg.toAdmin);
+            await messages.sort((a, b) => new Date(a.time) - new Date(b.time));
             messages.forEach((msg) => {
-            //    console.log("msg.image.img = " + msg.image.img);
-                if (msg.image.mime != "" && msg.image.mime != "url") msg.image.img = fs.readFileSync(msg.image.img, { encoding: 'base64' });
+                if (msg.image.mime != "" && msg.image.mime != "url")
+                    msg.image.img = fs.readFileSync(msg.image.img, { encoding: 'base64' });
             });
         }
         catch (e) { console.log(e); }
-      //  console.log(messages);
+        //  console.log(messages);
         return messages;
     }
-    
-    const search = async (data,cb) => {
-        console.log("data "+data.search)
+
+    const search = async (data, cb) => {
+        console.log("data " + data.search)
         let messages = [];
-        messages = await Message({room:data.room,user:data.user});
-        messages = messages.filter(msg =>msg.msg.search(data.search)>-1);
+        messages = await Message({ room: data.room, user: data.user });
+        messages = messages.filter(msg => msg.msg.search(data.search) > -1);
         cb(messages);
     }
 
     //----------------------------------
-  
+
     //--------------------------------
 
     const sendMessage = async (Data) => {
 
-        console.log("****** 0.2 ******users "+JSON.stringify(users));
+        console.log("****** 0.2 ******users " + JSON.stringify(users));
         if (Data.image.mime != "" && Data.image.mime != "url") {
             fs.writeFile('./public/images/' + Data.image.name, Data.image.img, (err) => console.log(err ? err : "success"));
             let filePath = "./public/images/" + Data.image.name;
@@ -95,6 +95,19 @@ const koko = (io, socket) => {
         try {
             if (Data.admin.length < 1) { socket.emit('info', "Error: Try to login again."); return 0; }
             if (Data.name.length < 1) { socket.emit('info', "Error: Name mest be longer."); return 0; }
+            console.log("----- img -------");
+            if (Data.image.mime != "" && Data.image.mime != "url") {
+                console.log("-----  Data.image.name "+ Data.image.name);
+                try {
+                    fs.writeFile('./public/images/' + Data.image.name, Data.image.img, (err) => console.log(err ? err : "success"));
+                    let filePath = "./public/images/" + Data.image.name;
+                    delete Data.image.img;
+                    Data.image.img = filePath;
+                }
+                catch (e) { console.log(e); }
+            }
+        
+
             const newRoom = new Rooms(Data);
             console.log("newRoom: " + newRoom); console.log("Data: " + Data);
             await newRoom.save().then(() => socket.emit('info', "New room created"));
