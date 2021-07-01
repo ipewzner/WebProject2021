@@ -9,6 +9,7 @@ const app = express();
 
 import postRoutes from './routes/posts.js'
 import userRoutes from './routes/users.js'
+import productRoutes from './routes/products.js'
 //import chatRoutes from './routes/chat.js'
 
 app.use(bodyParser.json({limit:"30mb",extends:true}));
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({limit:"30mb",extends:true}));
 app.use(cors());
 app.use('/posts', postRoutes);
 app.use('/users', userRoutes);
+app.use('/products', productRoutes);
 
 mongoose.connect('mongodb://localhost/flowerShop');
 const PORT = process.env.PORT || 5000;
