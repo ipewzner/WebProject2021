@@ -9,22 +9,36 @@ export default function AlertDialog(props) {
     const socket = props.socket;
     const [open, setOpen] = React.useState(false);
     // const [groupData, setGroupData] = useState({ name: '', image:{}, admin: '', users: [null], massges: [] });
-    const [file, setFile] = useState();
+    const [file, setFile] = useState({ name: "", mime: "" });
     const [gropeName, changeGropeName] = useState("");
 
     const handleClickOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (gropeName != "")
-        socket.emit('setNewGrupe', {
+        let image;
+        if (gropeName != "") {
+          
+            switch (file.mime) {
+                case "":
+                    image = { img: "", mime: "", name: "" };
+                    break;
+                case "url":
+                    image = { img: "", mime: file.mime, name: file.name };
+                    break;
+                default:
+                    image = { img: file, mime: file.mime, name: file.name };
+            }
+
+            socket.emit('setNewGrupe', {
                 name: gropeName,
-                image: { img: file ? file : "", mime: file ? file.type : "", name: file ? file.name : "" },
+                image,
                 admin: JSON.parse(localStorage.getItem('profile')).result.email,
                 users: [],
                 massges: []
             });
-        handleClose();
+            handleClose();
+        }
     }
 
 
@@ -42,20 +56,19 @@ export default function AlertDialog(props) {
                 </Grid>
 
                 <DialogContent>
-                    <DialogContentText>To create new group please enter details below.</DialogContentText>
                     <TextField autoFocus margin="dense" id="name" label="Grup name" onChange={e => changeGropeName(e.target.value)} />
                     <Grid container direction="row" justify="flex-start" alignItems="center">
                         <Grid>
-                            <TextField autoFocus margin="dense" id="img" label="Add img URL " onChange={(e) => setFile({ mime: 'url', name: e.target.value })} fullWidth />
+                            <TextField autoFocus margin="dense" id="img" label="Add img URL " onChange={(e) => setFile({ mime: "url", name: e.target.value })} fullWidth />
                         </Grid>
                         <Grid>
-                            <input color="primary" accept="image/*" type="file" onChange={(e) => setFile(e.target.files[0])} id="icon-button-file" style={{ display: 'none', }} />
-                            <label htmlFor="icon-button-file" >
+                            <input color="primary" accept="image/*" type="file" onChange={(e) => setFile(e.target.files[0])} id="button-file" style={{ display: 'none', }} />
+                            <label htmlFor="button-file" >
                                 <Button component="span" size="small" color="primary">
                                     <AddPhotoAlternateIcon />
                                 </Button>
                             </label>
-                            
+
                         </Grid>
                     </Grid>
                 </DialogContent>

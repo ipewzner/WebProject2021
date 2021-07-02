@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { produce, immer } from 'immer';
-import { Grid, Container, Hidden, Avatar, Paper, Typography, List, ListItem, ListItemText, Chip, Button, TextField } from '@material-ui/core';
+import { Grid, CardContent, Container, Hidden, Avatar, Paper, Typography, List, ListItem, ListItemText, Chip, Button, TextField } from '@material-ui/core';
 import NewGroupForm from './newGroupForm/newGroupForm.js';
 import InfoPopup from './infoPopup.js';
 import SearchIcon from '@material-ui/icons/Search';
@@ -11,6 +11,8 @@ import useStyles from './styles';
 import moment from 'moment';
 import io from 'socket.io-client';
 import Message from './Message/Message.js';
+import NewAvatar from '../NewAvatar/NewAvatar'
+
 const CONECTION_PORT = 'http://localhost:4000/';
 
 let socketRef;
@@ -59,16 +61,12 @@ export default function Dashboard() {
             <Paper className={classes.root}>
                 <InfoPopup msg={infoMsg} op={setInfoMsg} />
                 {/*<Typography variant="h5" component="h3">Chat app</Typography>*/}
-                <Grid container justify="space-between"  alignItems="center" direction="row" >
-                    <Grid justify="flex-start" >
-                        <Avatar className={classes.purple} alt={room?.name} src={room?.image}>{room?.name.charAt(0)}</Avatar>
-                        <Typography backgroundColor="blue" component="p"> {room?.name ? "" + room?.name : 'Entar grupe.'} </Typography>
-                    </Grid>
-
+                <Grid container justify="space-between" alignItems="center" direction="row" >
+                    <Grid justify="flex-start" > <NewAvatar avatarFor={room}></NewAvatar> </Grid>
                     <Grid justify="flex-end" >
                         <TextField label="Search" value={search} onChange={e => setSearch(e.target.value)} />
                         <Button component="span" className={classes.button} size="small" color="primary" onClick={() => {
-                            socketRef.current.emit('search', {room,search,user:user.email},(Data) => addMessage(Data));
+                            socketRef.current.emit('search', { room, search, user: user.email }, (Data) => addMessage(Data));
                         }}>
                             <SearchIcon />
                         </Button>
@@ -76,25 +74,16 @@ export default function Dashboard() {
                 </Grid>
                 <div className={classes.flex}>
                     <div className={classes.topicWindow}>
-                        {/*  <Button size="small" color="primary" onClick={() => setNewGroup(true)}>
-                            <GroupAddIcon fontSize="small">Add Group</GroupAddIcon>
-                        </Button>*/}
-
                         <NewGroupForm socket={socketRef.current} user={user} ></NewGroupForm>
                         <List>
-                            {
-                                roomList.length > 0 ? roomList.map((room, i) => (
-                                    <ListItem key={i} button onClick={(e) => {
-                                        setRoom(roomList[i]);
-                                        // socketRef.current.emit('setRoom',{room: roomList[i],user:user.result.email});
-                                        socketRef.current.emit('join room', { room: roomList[i], user: user.result.email }, (Data) => addMessage(Data));
-                                    }}>
-                                        <Grid container direction="row" justify="flex-start" alignItems="center">
-                                            <Avatar className={classes.purple} alt={room?.name} src={room?.image}>{room?.name.charAt(0)}</Avatar>
-                                            <Typography backgroundColor="blue" component="p"> {room?.name} </Typography>
-                                        </Grid>
-                                    </ListItem>
-                                )) : console.log("roomList empty")
+                            {roomList.length > 0 ? roomList.map((room, i) => (
+                                <ListItem key={i} button onClick={(e) => {
+                                    setRoom(roomList[i]);
+                                    socketRef.current.emit('join room', { room: roomList[i], user: user.result.email }, (Data) => addMessage(Data));
+                                }}>
+                                    <NewAvatar avatarFor={room}></NewAvatar>
+                                </ListItem>
+                            )) : console.log("roomList empty")
                             }
                         </List>
                     </div>
@@ -148,7 +137,6 @@ const infoMessage = (msg) => {
     //TO_DO: make pupup message
     console.log("msg: " + msg);
 }
-
 
 
 

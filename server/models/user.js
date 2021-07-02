@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema({
     id: {type: 'string'},
     resetToken:{type: 'string',default:''},
     expireToken:{type: 'string'},
+    
 })
 
 export default mongoose.model("User", userSchema);

@@ -11,14 +11,22 @@ const koko = (io, socket) => {
     let users = [];
 
     socket.on("join server", async (userName, cb) => {
-        console.log("*************join server:");
+      //  console.log("*************join server:");
         const user = { userName, id: socket.id };
         console.log("join server: " + JSON.stringify(userName.email));
         users.push(user);
-        console.log("users: " + JSON.stringify(users));
+       // console.log("users: " + JSON.stringify(users));
         io.emit("new user", users);
         let roomList = [];
-        try { roomList = await Rooms.find({ approved: true }); }
+        try { roomList = await Rooms.find({ approved: true }); 
+    
+        roomList.forEach((room) => {
+            console.log("----//---"+room.image.img);
+            if (room.image.mime != "" && room.image.mime != "url")
+            room.image.img = fs.readFileSync(room.image.img, { encoding: 'base64' });
+        });
+       
+    }
         catch (e) { console.log("----//---" + e + "----//---"); }
         cb(roomList);
     });
@@ -91,11 +99,11 @@ const koko = (io, socket) => {
     }
 
     const setNewGrupe = async (Data) => {
-        console.log("------------------"); console.log("setNewGrupe: " + Data); console.log("------------------");
+     //   console.log("------------------"); console.log("setNewGrupe: " + JSON.stringify(Data)); console.log("------------------");
         try {
             if (Data.admin.length < 1) { socket.emit('info', "Error: Try to login again."); return 0; }
             if (Data.name.length < 1) { socket.emit('info', "Error: Name mest be longer."); return 0; }
-            console.log("----- img -------");
+            console.log("----- img ------Data.image.mime  -"+Data.image.mime );
             if (Data.image.mime != "" && Data.image.mime != "url") {
                 console.log("-----  Data.image.name "+ Data.image.name);
                 try {

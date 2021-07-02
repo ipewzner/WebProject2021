@@ -31,7 +31,7 @@ const Message = (props) => {
             <CardContent>{
                 message.image?.mime != "" ? (
                     message.image.mime != "url" ? (
-                        <Image fileName={message.image.name} blob={/*new Blob([message.image.img], { type: message.image.type })*/b64toBlob(message.image.img, message.image.type)}></Image>
+                        <Image fileName={message.image.name} blob={b64toBlob(message.image.img, message.image.type)}></Image>
                     ) : (<img style={{ width: 150, height: "auto" }} src={message.img} alt={props.fileName}></img>
                     )
                 ) : null
