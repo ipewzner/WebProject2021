@@ -13,7 +13,7 @@ router.route('/').get(getProducts).post(createProduct)
 router
   .route('/:id')
   .get(getProductById)
-  .delete(auth, deleteProduct)
-  .put(auth, updateProduct)
+  .delete(deleteProduct)
+  .put(updateProduct)
 
 export default router

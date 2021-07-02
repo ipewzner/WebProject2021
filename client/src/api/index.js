@@ -16,9 +16,9 @@ export const signup = (formData) => API.post("/users/signup", formData);
 export const forgetPassword = (formData) => API.post("/users/forgetPassword", formData);
 
 //TO-DO
-export const fetchProdect = () => API.get('/posts');
-export const createProdect= (newPost) => API.post('/posts', newPost);
-export const updateProdect= (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost);
-export const deleteProdect= (id) => API.delete(`/posts/${id}`);
-export const likeProdect =(id) => API.patch(`/posts/${id}/likePost`);
+export const fetchProducts = () => API.get('/products');
+export const createProduct = (newPost) => API.post('/posts', newPost);
+export const updateProduct = (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost);
+export const deleteProduct = (id) => API.delete(`/posts/${id}`);
+export const likeProduct = (id) => API.patch(`/posts/${id}/likePost`);
 

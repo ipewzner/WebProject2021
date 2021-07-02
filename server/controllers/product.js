@@ -5,24 +5,14 @@ import Product from '../models/product.js'
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 10
-  const page = Number(req.query.pageNumber) || 1
-
-  const keyword = req.query.keyword
-    ? {
-        name: {
-          $regex: req.query.keyword,
-          $options: 'i',
-        },
-      }
-    : {}
-
-  const count = await Product.countDocuments({ ...keyword })
-  const products = await Product.find({ ...keyword })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1))
-
-  res.json({ products, page, pages: Math.ceil(count / pageSize) })
+  try {
+    const product = await Product.find();
+    console.log("bringing products");
+    console.log(product);
+    res.status(200).json(product);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
 })
 
 // @desc    Fetch single product
