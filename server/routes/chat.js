@@ -11,22 +11,23 @@ const koko = (io, socket) => {
     let users = [];
 
     socket.on("join server", async (userName, cb) => {
-      //  console.log("*************join server:");
+        //  console.log("*************join server:");
         const user = { userName, id: socket.id };
         console.log("join server: " + JSON.stringify(userName.email));
         users.push(user);
-       // console.log("users: " + JSON.stringify(users));
+        // console.log("users: " + JSON.stringify(users));
         io.emit("new user", users);
         let roomList = [];
-        try { roomList = await Rooms.find({ approved: true }); 
-    
-        roomList.forEach((room) => {
-            console.log("----//---"+room.image.img);
-            if (room.image.mime != "" && room.image.mime != "url")
-            room.image.img = fs.readFileSync(room.image.img, { encoding: 'base64' });
-        });
-       
-    }
+        try {
+            roomList = await Rooms.find({ approved: true });
+
+            roomList.forEach((room) => {
+                console.log("----//---" + room.image.img);
+                if (room.image.mime != "" && room.image.mime != "url")
+                    room.image.img = fs.readFileSync(room.image.img, { encoding: 'base64' });
+            });
+
+        }
         catch (e) { console.log("----//---" + e + "----//---"); }
         cb(roomList);
     });
@@ -99,22 +100,19 @@ const koko = (io, socket) => {
     }
 
     const setNewGrupe = async (Data) => {
-     //   console.log("------------------"); console.log("setNewGrupe: " + JSON.stringify(Data)); console.log("------------------");
         try {
             if (Data.admin.length < 1) { socket.emit('info', "Error: Try to login again."); return 0; }
             if (Data.name.length < 1) { socket.emit('info', "Error: Name mest be longer."); return 0; }
-            console.log("----- img ------Data.image.mime  -"+Data.image.mime );
+            console.log("----- img ------Data.image.mime  -" + Data.image.mime);
             if (Data.image.mime != "" && Data.image.mime != "url") {
-                console.log("-----  Data.image.name "+ Data.image.name);
+                console.log("-----  Data.image.name " + Data.image.name);
                 try {
                     fs.writeFile('./public/images/' + Data.image.name, Data.image.img, (err) => console.log(err ? err : "success"));
                     let filePath = "./public/images/" + Data.image.name;
                     delete Data.image.img;
                     Data.image.img = filePath;
-                }
-                catch (e) { console.log(e); }
+                } catch (e) { console.log(e); }
             }
-        
 
             const newRoom = new Rooms(Data);
             console.log("newRoom: " + newRoom); console.log("Data: " + Data);
@@ -192,6 +190,18 @@ const koko = (io, socket) => {
         //socket.to(Data.room.admin).emit("AdminJoinRoomRequest",Data);
     }
 
+    const totelLikesAndDislikes = async (data, cb) => {
+        console.log("totelLikesAndDislikes " + (data.email))
+        let message = []; 
+        message = await massges.find({creatorEmail: data.email });
+        let likes = message.map(msg => msg.likes.length).reduce((acc, msg) => msg + acc);
+        let dislikes = message.map(msg => msg.dislikes.length).reduce((acc, msg) => msg + acc);
+        cb({ likes: likes, dislikes: dislikes });
+    }
+
+
+
+
     socket.on("search", search);
     socket.on("sendMessage", sendMessage);
     socket.on("setNewGrupe", setNewGrupe);
@@ -200,6 +210,7 @@ const koko = (io, socket) => {
     socket.on("likeMessage", likeMessage);
     socket.on("dislikeMessage", dislikeMessage);
     socket.on("approvedJoinRoomRequest", approvedJoinRoomRequest);
+    socket.on("totelLikesAndDislikes", totelLikesAndDislikes);
 }
 export default koko;
 

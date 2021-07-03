@@ -46,12 +46,12 @@ const Message = (props) => {
             {message.toAdmin?(<Button size="small" color="primary" onClick={() => socket.emit('approvedJoinRoomRequest', { 'user': user, 'message': message })}>Yes</Button>):null}
               
                 <Button size="small" color="primary" onClick={() => socket.emit('likeMessage', { 'user': user, 'message': message })}>
-                    <ThumbUpAlt fontSize="small" />
+                    <ThumbUpAlt color="primary" fontSize="small" />
                     &nbsp;{likes?.length} Like &nbsp;
 
                 </Button>
                 <Button size="small" color="primary" onClick={() => socket.emit('dislikeMessage', { 'user': user, 'message': message })}>
-                    <ThumbDownAlt fontSize="small" />
+                    <ThumbDownAlt color="primary" fontSize="small" />
                     &nbsp;{dislikes?.length} Dislike &nbsp;
 
                 </Button>

@@ -11,7 +11,9 @@ import useStyles from './styles';
 import moment from 'moment';
 import io from 'socket.io-client';
 import Message from './Message/Message.js';
-import NewAvatar from '../NewAvatar/NewAvatar'
+import NewAvatar from '../NewAvatar/NewAvatar';
+import Details from './Details/Details';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const CONECTION_PORT = 'http://localhost:4000/';
 
@@ -31,6 +33,7 @@ export default function Dashboard() {
     const [infoMsg, setInfoMsg] = useState(null);
     const [tempData, setTempData] = useState(null);
     const [search, setSearch] = useState("");
+    const [details, setDetails] = useState(false);
     useEffect(() => {
         socketRef.current = io.connect(CONECTION_PORT, {
             withCredentials: true,
@@ -60,7 +63,6 @@ export default function Dashboard() {
         <div>
             <Paper className={classes.root}>
                 <InfoPopup msg={infoMsg} op={setInfoMsg} />
-                {/*<Typography variant="h5" component="h3">Chat app</Typography>*/}
                 <Grid container justify="space-between" alignItems="center" direction="row" >
                     <Grid justify="flex-start" > <NewAvatar avatarFor={room}></NewAvatar> </Grid>
                     <Grid justify="flex-end" >
@@ -69,6 +71,16 @@ export default function Dashboard() {
                             socketRef.current.emit('search', { room, search, user: user.email }, (Data) => addMessage(Data));
                         }}>
                             <SearchIcon />
+                        </Button>
+                        <Button component="span" className={classes.button} size="small" color="primary"
+                            onClick={() => {
+                                if (details) setDetails(null);
+                                else {
+                                    socketRef.current.emit('totelLikesAndDislikes', { email: user.result.email },
+                                          (data) => setDetails({ email: user.result.email, name: user.result.name, likes: data.likes, dislikes: data.dislikes }));
+                                }
+                            }}>
+                            <MoreVertIcon />
                         </Button>
                     </Grid>
                 </Grid>
@@ -96,20 +108,18 @@ export default function Dashboard() {
                             ))
                         }
                     </div>
+                    <div> {details && (<Details info={details} />)} </div>
                 </div>
                 <div className={classes.flex}>
                     {room?.users.findIndex(x => x == user.result.email) > -1 && (
                         <TextField label="send message" className={classes.chatBox} value={textValue} onChange={e => changeTextValue(e.target.value)} />
                     )}
-
                     <input color="primary" accept="image/*" type="file" onChange={(e) => setFile(e.target.files[0])} id="icon-button-file" style={{ display: 'none', }} />
                     <label htmlFor="icon-button-file" hidden={!(room?.users.findIndex(x => x == user.result.email) > -1)}>
                         <Button component="span" className={classes.button} size="small" color="primary">
                             <AddPhotoAlternateIcon />
                         </Button>
                     </label>
-
-                    {/* <Button variant="contained" onClick={(e) => socketRef.current.emit('infoMsgTest')} color="primary">infoMsgTest</Button>*/}
                     {room && (<Button variant="contained" onClick={(e) => {
                         (room && user) ? socketRef.current.emit('sendMessage', {
                             creatorName: JSON.parse(localStorage.getItem('profile')).result.name,
@@ -125,9 +135,7 @@ export default function Dashboard() {
                     </Button>)}
                 </div>
             </Paper>
-            {/*   <NewGroupForm socket={socketRef.current} user={user} trigger={newGroup} setTrigger={setNewGroup} ></NewGroupForm>
-         */}
-        </div>
+        </div >
     )
 }
 

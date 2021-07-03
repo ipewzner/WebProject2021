@@ -24,6 +24,14 @@ export default makeStyles((theme) => ({
   chatBox: {
     width: '85%',
   },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    borderRadius: '15px',
+    height: '100%',
+    position: 'relative',
+  },
   botton: {
     width: '15%',
   }
