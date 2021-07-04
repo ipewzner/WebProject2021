@@ -4,7 +4,6 @@ import * as api from '../api';
 //Action Creators
 export const getProducts = () => async (dispatch) => {
     try {
-        console.log("calling to api for products");
         const { data } = await api.fetchProducts();
         dispatch({ type: FETCH_ALL, payload: data });
     } catch (err) {

@@ -1,14 +1,22 @@
 import React from 'react';
-import { Grid, CircularProgress } from '@material-ui/core'
+import { Grid, Card,CardContent,CardMedia,Typography} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import Product from './Product/Product';
 
 const Products = ({ setCurrentId }) => {
     const products = useSelector((state) => state.products);
 
+        
     console.log(products);
     return (
-        !products.length ? <CircularProgress /> : (
+        !products.length ? 
+        <CardMedia
+          image="/images/empty-cart.png"
+          title="No Product Here!" >
+              No Product Here!
+        </CardMedia> 
+        : (
             <Grid container spacing={4}>
                 {products.map((product) => (
                     <Grid item key={product} xs={12} sm={6} md={4}>

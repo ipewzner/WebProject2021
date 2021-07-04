@@ -39,6 +39,8 @@ export default function Navbar() {
                 <Button component={Link} to="/about" variant="contained" color="primary">About</Button>
                 <Button component={Link} to="/store" variant="contained" color="primary">store</Button>
                 <Button component={Link} to="/blogs" variant="contained" color="primary">Blogs</Button>
+                <Button component={Link} to="/cart" variant="contained" color="primary">Cart</Button>
+
 
                 {user?.result ? (
                     <div className={classes.profile}>

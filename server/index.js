@@ -11,7 +11,7 @@ const app = express();
 import postRoutes from './routes/posts.js'
 import userRoutes from './routes/users.js'
 import productRoutes from './routes/products.js'
-//import chatRoutes from './routes/chat.js'
+import shoppingCartRoutes from './routes/shoppingCart.js'
 
 app.use(bodyParser.json({limit:"30mb",extends:true}));
 app.use(bodyParser.urlencoded({limit:"30mb",extends:true}));
@@ -19,6 +19,7 @@ app.use(cors());
 app.use('/posts', postRoutes);
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
+app.use('/cart', shoppingCartRoutes);
 
 connectDB();
 const PORT = process.env.PORT || 5000;

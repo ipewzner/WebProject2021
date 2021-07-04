@@ -15,20 +15,20 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import { useDispatch } from 'react-redux';
 import useStyles from './styles';
-import Products from './products';
-import { getProducts } from '../../actions/product';
+import Products from '../store/products';
+import { getCartProducts } from '../../actions/cart';
 
-const Store = () => {
+const Cart = () => {
   const classes = useStyles();
 
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
+  const userId = JSON.parse(localStorage.getItem('profile')).result._id;
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getCartProducts(userId));
   }, [currentId, dispatch]);
 
-  console.log(Store);
   return (
     <React.Fragment>
       <CssBaseline />
@@ -51,4 +51,4 @@ const Store = () => {
   )
 }
 
-export default Store;
+export default Cart;

@@ -9,6 +9,7 @@ import About from './components/About/About';
 import store from './components/store/store';
 import Blogs from './components/Blogs/Blogs';
 import Chat from './components/Chat/Chat';
+import Cart from './components/Cart/Cart';
  
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
                 <Route path="/auth" exact component={Auth} />
                 <Route path="/store" exact component={store} />
                 <Route path="/blogs" exact component={Blogs} />
+                <Route path="/cart" exact component={Cart} />
                 </Switch>
             </Container>
         </BrowserRouter>

@@ -1,40 +1,101 @@
-import React from 'react';
-import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@material-ui/core';
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
-import DeleteIcon from '@material-ui/icons/Delete';
-import MoreHorizontalIcon from '@material-ui/icons/MoreHoriz';
-import moment from 'moment';
-import useStyles from './styles';
+
 import { useDispatch } from 'react-redux';
-import { deleteProdect, likeProdect } from '../../../actions/store';
+import { deleteProdect} from '../../../actions/store';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { addToCart } from '../../../actions/cart';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    maxWidth: 345,
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+}));
 
 const Product = ({ product, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [expanded, setExpanded] = React.useState(false);
+    const user = JSON.parse(localStorage.getItem('profile')).result._id;
+    console.log(user);
+
+    const handleExpandClick = () => {
+      setExpanded(!expanded);
+    };
+  
+    const handleAddClick = () => {
+      console.log(user + '\n' + product._id);
+      addToCart(user, product._id);
+    };
 
     return (
-        <Card className={classes.card}>
-            <CardMedia
-                className={classes.cardMedia}
-                image={process.env.PUBLIC_URL + product.image}
-            />
-            <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="h5" component="h2">
-                    {product.name}
-                </Typography>
-                <Typography>
-                    {product.description}
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Button size="small" color="primary">
-                    View
-                </Button>
-                <Button size="small" color="primary">
-                    Edit
-                </Button>
-            </CardActions>
-        </Card>);
+      <Card className={classes.root}>
+        <CardHeader
+          title={product.name}
+          subheader={product.brand}
+        />
+        <CardMedia
+          className={classes.media}
+          image={product.image}
+          title={product.name}
+        />
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" component="p">
+              {product.price} $
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+          <IconButton aria-label="add to shopping cart" onClick={handleAddClick}>
+            <AddShoppingCartIcon />
+          </IconButton>
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent> 
+            <Typography paragraph>
+             {product.description}
+            </Typography>
+          </CardContent>
+        </Collapse>
+      </Card>
+    );
 }
 export default Product;
 
