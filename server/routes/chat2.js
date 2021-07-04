@@ -14,6 +14,7 @@ export const onConnection = async (socket) => {
     try { socket.emit('roomList', await Rooms.find()); }
     catch (e) { console.log("----//---" + e + "----//---"); }
 
+
     socket.on('setRoom', async (Data) => {
         console.log("User try to joined room: " + Data + " socket.id " + socket.id);
         socket.join(Data);

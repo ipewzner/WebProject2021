@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const roomSchema = mongoose.Schema({
     name:String, 
-    image:String,
+    image:{img:String,mime:String,name:String},
     admin:{ type:String, require: "creator is required" },
     users:[ { type: Array, default: void 0 }],
     massges:[{ type: Array}],

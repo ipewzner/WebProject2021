@@ -7,7 +7,7 @@ import {
   createProduct,
   updateProduct
 } from '../controllers/product.js'
-import auth from '../middleware/auth.js'
+import {auth} from '../middleware/auth.js'
 
 router.route('/').get(getProducts).post(createProduct)
 router

@@ -14,11 +14,7 @@ const Message = (props) => {
     const [likes, setLikes] = useState([]);
     const [dislikes, setDislikes] = useState(message.dislikes);
 
-    useEffect(() => {
-       setLikes(message.likes);
-    }, [message.likes]);
-   
-    
+    useEffect(() => { setLikes(message.likes); }, [message.likes]);
 
     return (
         <Card className={classes.card}>
@@ -29,37 +25,36 @@ const Message = (props) => {
                 </CardActions>
             </div>
             <CardContent>{
-                message.image?.mime != "" ? (
+                message.image?.mime != "" && (
                     message.image.mime != "url" ? (
-                        <Image fileName={message.image.name} blob={/*new Blob([message.image.img], { type: message.image.type })*/b64toBlob(message.image.img, message.image.type)}></Image>
+                        <Image fileName={message.image.name} blob={b64toBlob(message.image.img, message.image.type)}></Image>
                     ) : (<img style={{ width: 150, height: "auto" }} src={message.img} alt={props.fileName}></img>
                     )
-                ) : null
+                ) 
             }
                 <Typography variant="body2" color="textSecondary" variant="h5" components="p">{message.msg}</Typography>
-
-
-
             </CardContent>
 
             <CardActions className={classes.cardActions}>
-            {message.toAdmin?(<Button size="small" color="primary" onClick={() => socket.emit('approvedJoinRoomRequest', { 'user': user, 'message': message })}>Yes</Button>):null}
-              
-                <Button size="small" color="primary" onClick={() => socket.emit('likeMessage', { 'user': user, 'message': message })}>
-                    <ThumbUpAlt fontSize="small" />
-                    &nbsp;{likes?.length} Like &nbsp;
+                {message.toAdmin ?
+                    (<Button size="small" color="primary" onClick={() => socket.emit('approvedJoinRoomRequest', { 'user': user, 'message': message })}>Yes</Button>)
+                    : (<>
+                            <Button size="small" color="primary" onClick={() => socket.emit('likeMessage', { 'user': user, 'message': message })}>
+                                <ThumbUpAlt color="primary" fontSize="small" />
+                                &nbsp;{likes?.length} Like &nbsp;
+                            </Button>
 
-                </Button>
-                <Button size="small" color="primary" onClick={() => socket.emit('dislikeMessage', { 'user': user, 'message': message })}>
-                    <ThumbDownAlt fontSize="small" />
-                    &nbsp;{dislikes?.length} Dislike &nbsp;
+                            <Button size="small" color="primary" onClick={() => socket.emit('dislikeMessage', { 'user': user, 'message': message })}>
+                                <ThumbDownAlt color="primary" fontSize="small" />
+                                &nbsp;{dislikes?.length} Dislike &nbsp;
+                            </Button>
+                        </>)}
 
-                </Button>
-                {(message.creatorEmail == user.result.email) ?
-                    <Button size="small" color="primary"  onClick={() => socket.emit('deleteMessage', { 'user': user, 'message': message })}>
+                {(message.creatorEmail == user.result.email)&&
+                    <Button size="small" color="primary" onClick={() => socket.emit('deleteMessage', { 'user': user, 'message': message })}>
                         <Delete fontSize="small" />
-                         Delete
-                    </Button> : null}
+                        Delete
+                    </Button>}
             </CardActions>
         </Card>);
 }

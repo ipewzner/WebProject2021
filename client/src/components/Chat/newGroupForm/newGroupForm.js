@@ -1,27 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import {Dialog, Button, Grid, TextField,DialogTitle,
-     DialogContentText, DialogActions,DialogContent } from '@material-ui/core';
+import { Dialog, Button, Grid, TextField, DialogTitle, DialogContentText, DialogActions, DialogContent } from '@material-ui/core';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import CloseIcon from '@material-ui/icons/Close';
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import moment from 'moment';
 
 export default function AlertDialog(props) {
     const user = props.user;
     const socket = props.socket;
     const [open, setOpen] = React.useState(false);
-    const [groupData, setGroupData] = useState({ name: '', image: '', admin:'', users: [null], massges: [] });
+    // const [groupData, setGroupData] = useState({ name: '', image:{}, admin: '', users: [null], massges: [] });
+    const [file, setFile] = useState({ name: "", mime: "" });
+    const [gropeName, changeGropeName] = useState("");
 
     const handleClickOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
     const handleSubmit = (e) => {
         e.preventDefault();
-        setGroupData({ ...groupData, admin: JSON.parse(localStorage.getItem('profile')).result.email});
-        console.log("groupData: " + JSON.stringify(groupData));
-        if(groupData.name!=""&&groupData.admin!=''){
-        socket.emit('setNewGrupe', groupData);
-        setGroupData({ name: '', image: '', admin:'', users: [], massges: [] });
-        handleClose();}
-    }  
-       
+        let image;
+        if (gropeName != "") {
+          
+            switch (file.mime) {
+                case "":
+                    image = { img: "", mime: "", name: "" };
+                    break;
+                case "url":
+                    image = { img: "", mime: file.mime, name: file.name };
+                    break;
+                default:
+                    image = { img: file, mime: file.mime, name: file.name };
+            }
+
+            socket.emit('setNewGrupe', {
+                name: gropeName,
+                image,
+                admin: JSON.parse(localStorage.getItem('profile')).result.email,
+                users: [JSON.parse(localStorage.getItem('profile')).result.email],
+                massges: []
+            });
+            handleClose();
+        }
+    }
+
+
     return (
         <div>
             <Button size="small" color="primary" onClick={handleClickOpen}>
@@ -36,9 +57,21 @@ export default function AlertDialog(props) {
                 </Grid>
 
                 <DialogContent>
-                    <DialogContentText>To create new group please enter details below.</DialogContentText>
-                    <TextField autoFocus margin="dense" id="name" label="Grup name" onChange={(e) => setGroupData({ ...groupData, name: e.target.value })} fullWidth />
-                    <TextField autoFocus margin="dense" id="img" label="add img" onChange={(e) => setGroupData({ ...groupData, image: e.target.value })} fullWidth />
+                    <TextField autoFocus margin="dense" id="name" label="Grup name" onChange={e => changeGropeName(e.target.value)} />
+                    <Grid container direction="row" justify="flex-start" alignItems="center">
+                        <Grid>
+                            <TextField autoFocus margin="dense" id="img" label="Add img URL " onChange={(e) => setFile({ mime: "url", name: e.target.value })} fullWidth />
+                        </Grid>
+                        <Grid>
+                            <input color="primary" accept="image/*" type="file" onChange={(e) => setFile(e.target.files[0])} id="button-file" style={{ display: 'none', }} />
+                            <label htmlFor="button-file" >
+                                <Button component="span" size="small" color="primary">
+                                    <AddPhotoAlternateIcon />
+                                </Button>
+                            </label>
+
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleSubmit} color="primary"> Create group </Button>
