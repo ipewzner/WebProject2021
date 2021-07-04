@@ -11,7 +11,7 @@ let roomList = [];
 const koko = (io, socket) => {
 
     //----------------------------------
-    const joienServer = async (userName, cb) => {
+    const joinServer = async (userName, cb) => {
         const user = { userName, id: socket.id };
         console.log("join server: " + JSON.stringify(userName.email));
         users.findIndex(u => u == user) > -1 && users.push(user);
@@ -26,7 +26,7 @@ const koko = (io, socket) => {
                     room.image.img = fs.readFileSync(room.image.img, { encoding: 'base64' });
             });
         }
-        catch (e) { console.log("----//---" + e + "----//---"); }
+        catch (e) { console.log(e); }
         cb(roomList);
     }
 
@@ -218,7 +218,7 @@ const koko = (io, socket) => {
     
     socket.on("deleteRoom", deleteRoom);
     socket.on("room approve", roomApprove);
-    socket.on("join server", joienServer);
+    socket.on("join server", joinServer);
     socket.on('join room', joinRoom);
     socket.on('disconnect', disconnect);
     socket.on("search", search);

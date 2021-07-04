@@ -3,7 +3,7 @@ import { Container, Typography, Button, Avatar, Paper, Grid, Icon } from '@mater
 import { useDispatch } from 'react-redux';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useHistory, useLocation } from 'react-router-dom';
-
+ 
 import useStyles from './styles';
 import Input from './Input';
 import { signup, signin, forgetPassword ,resetPassword} from '../../actions/auth';
@@ -94,7 +94,7 @@ export default function Auth() {
                         }[mode]}
                     </Button>
 
-                    <label hidden={mode == 'forgetPassword' || mode == 'resetPassword'}>
+                    <label hidden={mode == 'forgetPassword' ||mode == 'SignUp'|| mode == 'resetPassword'}>
                         <GoogleLogin
                             clientId="702271930565-uuumi1db19csujberefugrq67t2eb6g7.apps.googleusercontent.com"
                             render={(renderProps) => (

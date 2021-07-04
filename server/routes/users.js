@@ -5,7 +5,7 @@ import {auth,isAdmin} from '../middleware/auth.js';
 const router=express.Router();
 router.all('/',(req, res,next) =>{console.log("req.body "+req.body);next();});
 
-router.get('/',()=>{console.log("getUsers8888");next();},getUsers);
+router.get('/',isAdmin,getUsers);
 router.post('/',createUser);
 router.patch('/:id',updateUser);
 router.delete('/:id',deleteUser);
