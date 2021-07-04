@@ -1,27 +1,53 @@
-import React from 'react';
-import { Grid, CircularProgress } from '@material-ui/core'
-import { useSelector } from 'react-redux';
-import Prodect from './prodect/prodect';
+import React, { useState, useEffect } from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import CameraIcon from '@material-ui/icons/PhotoCamera';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import StarIcon from '@material-ui/icons/Star';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
+import { useDispatch } from 'react-redux';
 import useStyles from './styles';
+import Products from './products';
+import { getProducts } from '../../actions/product';
 
-const Store= ({setCurrentId})=>{
+const Store = () => {
+  const classes = useStyles();
 
-    const Store = useSelector((state) => state.Store);
-    const classes = useStyles();
+  const [currentId, setCurrentId] = useState(0);
+  const dispatch = useDispatch();
 
-    console.log(Store);
-    return (
-     /*   !Store.length ? <CircularProgress /> : (
-            <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-                {Store.map((Prodect) => (
-                    <Grid key={Prodect._id} item xs={12} sm={6}>
-                        <Prodect post={Prodect} setCurrentId={setCurrentId} />
-                    </Grid>
-                ))}
-            </Grid>*/
-            <h1>i am in store</h1>
-        )
- //   );
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [currentId, dispatch]);
+
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <AppBar position="relative">
+        <Toolbar>
+          <StarIcon className={classes.icon} />
+          <Typography variant="h6" color="inherit" noWrap>
+            Our Printers
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <main>
+        {/* Hero unit */}
+        <Container className={classes.cardGrid} maxWidth="md">
+          {/* End hero unit */}
+          <Products setCurrentId={setCurrentId} />
+        </Container>
+      </main>
+    </React.Fragment>
+  )
 }
 
 export default Store;

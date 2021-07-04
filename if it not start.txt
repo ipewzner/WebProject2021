@@ -1,0 +1,2 @@
+אם הצד לקוח לא מתחיל לעבוד תתקין את הנ"ל
+npm install react-scripts --save

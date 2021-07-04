@@ -22,14 +22,18 @@ export const forgetPassword = (formData) => API.post("/users/forgetPassword", fo
 export const resetPassword = (formData) => API.post("/users/resetPassword", formData);
 
 //TO-DO
-export const fetchProdect = () => API.get('/posts');
-export const createProdect= (newPost) => API.post('/posts', newPost);
-export const updateProdect= (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost);
-export const deleteProdect= (id) => API.delete(`/posts/${id}`);
-export const likeProdect =(id) => API.patch(`/posts/${id}/likePost`);
+export const fetchProducts = () => API.get('/products');
+export const createProduct = (newPost) => API.post('/posts', newPost);
+export const updateProduct = (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost);
+export const deleteProduct = (id) => API.delete(`/products/${id}`);
+export const likeProduct = (id) => API.patch(`/posts/${id}/likePost`);
 
 
 export const fetchUsers = () => API.get('/users');
 export const createUser = (newUser) => API.post('/users', newUser);
 export const updateUser = (id, updatedUser) => API.patch(`/users/${id}`, updatedUser);
 export const deleteUser = (id) => API.delete(`/users/${id}`);
+
+export const fetchCartProducts = (user) => API.get(`/cart/${user}/products`);
+export const addToCart = (user, id) => API.post(`/cart/${user}/${id}`);
+export const removeFromCart = (user, id) => API.delete(`/cart/${user}/${id}`);

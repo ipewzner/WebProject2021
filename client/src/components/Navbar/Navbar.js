@@ -43,6 +43,8 @@ export default function Navbar() {
                         <Button component={Link} to="/store" variant="contained" color="primary">store</Button>
                         <Button component={Link} to="/blogs" variant="contained" color="primary">Blogs</Button>
                         <Button component={Link} to="/Users" variant="contained" color="primary">Users</Button>
+                        <Button component={Link} to="/cart" variant="contained" color="primary">Cart</Button>
+
                     </>)}
             </Toolbar>
             {user?.result ? (

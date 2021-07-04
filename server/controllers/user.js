@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import base64url from 'b64url';
 import User from "../models/user.js";
 import { sendMail } from '../lib/mail.js';
+import { createCart } from "./shoppingCart.js";
+
 const secret = 'test';
 
 export const signinByToken = async (req, res) => {
@@ -55,6 +57,7 @@ export const signup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 12);
         const newUser = await User.create({ email, password: hashedPassword, name: `${firstName}${lastName}` ,type:'client'});
         const token = jwt.sign({ email: newUser.email, id: newUser._id ,type:newUser.type}, secret, { expiresIn: "1h" });
+        createCart(newUser._id);
         res.status(200).json({ newUser, token });
     } catch (err) { res.status(500).json({ message: 'Something went wrong.' }); }
 }
