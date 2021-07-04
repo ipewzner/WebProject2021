@@ -15,6 +15,7 @@ export const updatePost = (id, updatedPost) => API.patch(`/posts/${id}`, updated
 export const deletePost = (id) => API.delete(`/posts/${id}`);
 export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 
+export const signinByToken = (formData) => API.post("/users/signinByToken", formData);
 export const signin = (formData) => API.post("/users/signin", formData);
 export const signup = (formData) => API.post("/users/signup", formData);
 export const forgetPassword = (formData) => API.post("/users/forgetPassword", formData);

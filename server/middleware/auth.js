@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 const secret = 'test';
 
 const auth = async (req, res, next) =>{
@@ -12,7 +12,7 @@ const auth = async (req, res, next) =>{
             req.userId = decodeData.id;
         }else{
             decodeData =jwt.decode(token);
-            req.userId = decodeData.sub;
+            req.email = decodeData.email;
         }
         next();
     }

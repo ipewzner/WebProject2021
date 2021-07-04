@@ -34,7 +34,7 @@ export default function Auth() {
         switch (mode) {
             case 'forgetPassword': dispatch(forgetPassword(formData, history)); break;
             case 'SignUp': dispatch(signup(formData, history)); break;
-            case 'SignIn': dispatch(signin(formData, history)); break;
+            case 'SignIn': dispatch(signin({ myAuth:'myAuth',formData}, history)); break;
             case 'resetPassword':
                 setFormData({ ...formData, resetToken: resetToken });
                 dispatch(resetPassword(formData, history));
@@ -47,14 +47,19 @@ export default function Auth() {
         const result = res?.profileObj;
         const token = res?.tokenId;
         try {
-            dispatch({ type: 'AUTH', data: { result, token } });
+         //   dispatch({ type: 'AUTH', data: { result, token } });
+         dispatch(signin({ myAuth:'google',result, token}, history));
             history.push('/');
         } catch (err) { console.log(err); }
     };
 
     const googleFailure = (error) => { console.log('Google Sign In was unsuccessful. Try again later. ' + error) };
-    const FacebookFailure = (error) => { console.log('Facebook Sign In was unsuccessful. Try again later. ' + error) };
-    const responseFacebook = (response) => { console.log(response); }
+    const responseFacebook = (response) => { console.log(response); 
+        try {
+            dispatch(signin({ myAuth:'facebook',response}, history));
+               history.push('/');
+           } catch (err) { console.log(err); }
+    }
 
     return (
         <Container component="main" maxWidth="xs">
