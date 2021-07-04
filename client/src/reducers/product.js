@@ -7,7 +7,6 @@ export default (products = [], action) => {
         case UPDATE:
             return products.map((product) => product._id == action.payload._id ? action.payload : product);
         case FETCH_ALL: {
-            console.log("got into the reducers - products fetch all");
             return action.payload;
         }
         case CREATE:

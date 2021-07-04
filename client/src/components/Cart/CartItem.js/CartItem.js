@@ -1,6 +1,4 @@
-
 import { useDispatch } from 'react-redux';
-import { deleteProdect} from '../../../actions/store';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -40,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Product = ({ product, setCurrentId }) => {
+const CartItem = ({ item, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [expanded, setExpanded] = React.useState(false);
@@ -53,24 +51,24 @@ const Product = ({ product, setCurrentId }) => {
     };
   
     const handleAddClick = () => {
-      // console.log(user + '\n' + product._id);
-      addToCart(user, product._id);
+      // console.log(user + '\n' + item._id);
+      addToCart(user, item._id);
     };
 
     return (
       <Card className={classes.root}>
         <CardHeader
-          title={product.name}
-          subheader={product.brand}
+          title={item.name}
+          subheader={item.brand}
         />
         <CardMedia
           className={classes.media}
-          image={product.image}
-          title={product.name}
+          image={item.image}
+          title={item.name}
         />
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-              {product.price} $
+              {item.price} $
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
@@ -91,67 +89,11 @@ const Product = ({ product, setCurrentId }) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent> 
             <Typography paragraph>
-             {product.description}
+             {item.description}
             </Typography>
           </CardContent>
         </Collapse>
       </Card>
     );
 }
-export default Product;
-
-// <Card>
-//     <ListGroup variant='flush'>
-//         <ListGroup.Item>
-//             <Row>
-//                 <Col>Price:</Col>
-//                 <Col>
-//                     <strong>${product.price}</strong>
-//                 </Col>
-//             </Row>
-//         </ListGroup.Item>
-
-//         <ListGroup.Item>
-//             <Row>
-//                 <Col>Status:</Col>
-//                 <Col>
-//                     {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
-//                 </Col>
-//             </Row>
-//         </ListGroup.Item>
-
-//         {product.countInStock > 0 && (
-//             <ListGroup.Item>
-//                 <Row>
-//                     <Col>Qty</Col>
-//                     <Col>
-//                         <Form.Control
-//                             as='select'
-//                             value={qty}
-//                             onChange={(e) => setQty(e.target.value)}
-//                         >
-//                             {[...Array(product.countInStock).keys()].map(
-//                                 (x) => (
-//                                     <option key={x + 1} value={x + 1}>
-//                                         {x + 1}
-//                                     </option>
-//                                 )
-//                             )}
-//                         </Form.Control>
-//                     </Col>
-//                 </Row>
-//             </ListGroup.Item>
-//         )}
-
-//         <ListGroup.Item>
-//             <Button
-//                 onClick={addToCartHandler}
-//                 className='btn-block'
-//                 type='button'
-//                 disabled={product.countInStock === 0}
-//             >
-//                 Add To Cart
-//             </Button>
-//         </ListGroup.Item>
-//     </ListGroup>
-// </Card>
+export default CartItem;

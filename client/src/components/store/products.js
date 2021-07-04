@@ -8,7 +8,6 @@ const Products = ({ setCurrentId }) => {
     const products = useSelector((state) => state.products);
 
         
-    console.log(products);
     return (
         !products.length ? 
         <CardMedia

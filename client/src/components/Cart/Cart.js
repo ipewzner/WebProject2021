@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import { useDispatch } from 'react-redux';
 import useStyles from './styles';
-import Products from '../store/products';
+import CartItems from './CartItems';
 import { getCartProducts } from '../../actions/cart';
 
 const Cart = () => {
@@ -23,7 +23,7 @@ const Cart = () => {
 
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
-  const userId = JSON.parse(localStorage.getItem('profile')).result._id;
+  const userId = JSON.parse(localStorage.getItem('profile')).newUser._id;
 
   useEffect(() => {
     dispatch(getCartProducts(userId));
@@ -44,7 +44,7 @@ const Cart = () => {
         {/* Hero unit */}
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
-          <Products setCurrentId={setCurrentId} />
+          <CartItems setCurrentId={setCurrentId} />
         </Container>
       </main>
     </React.Fragment>

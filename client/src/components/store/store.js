@@ -28,7 +28,6 @@ const Store = () => {
     dispatch(getProducts());
   }, [currentId, dispatch]);
 
-  console.log(Store);
   return (
     <React.Fragment>
       <CssBaseline />
