@@ -4,6 +4,8 @@ import * as api from '../api';
 //Action Creators
 export const getProducts = () => async (dispatch) => {
     try {
+        
+        console.log("???!!!!!!!!!!!!!!!1");
         const { data } = await api.fetchProducts();
         dispatch({ type: FETCH_ALL, payload: data });
     } catch (err) {
@@ -31,6 +33,7 @@ export const updateProduct = (id, product) => async (dispatch) => {
 
 export const deleteProduct = (id) => async (dispatch) => {
     try {
+        console.log("maybe here?");
         await api.deleteProduct(id);
         dispatch({ type: DELETE, payload: id });
     } catch (err) {

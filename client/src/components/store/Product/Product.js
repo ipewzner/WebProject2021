@@ -1,6 +1,6 @@
 
 import { useDispatch } from 'react-redux';
-import { deleteProdect} from '../../../actions/store';
+import { deleteProduct} from '../../../actions/product';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { addToCart } from '../../../actions/cart';
 
@@ -53,8 +54,11 @@ const Product = ({ product, setCurrentId }) => {
     };
   
     const handleAddClick = () => {
-      // console.log(user + '\n' + product._id);
       addToCart(user, product._id);
+    };
+    const handleRemoveClick = () => {
+      console.log("in removee handler");
+      deleteProduct(product._id);
     };
 
     return (
@@ -76,6 +80,9 @@ const Product = ({ product, setCurrentId }) => {
         <CardActions disableSpacing>
           <IconButton aria-label="add to shopping cart" onClick={handleAddClick}>
             <AddShoppingCartIcon />
+          </IconButton>
+          <IconButton aria-label="remove from store" onClick={handleRemoveClick}>
+            <DeleteForeverIcon />
           </IconButton>
           <IconButton
             className={clsx(classes.expand, {
@@ -99,59 +106,3 @@ const Product = ({ product, setCurrentId }) => {
     );
 }
 export default Product;
-
-// <Card>
-//     <ListGroup variant='flush'>
-//         <ListGroup.Item>
-//             <Row>
-//                 <Col>Price:</Col>
-//                 <Col>
-//                     <strong>${product.price}</strong>
-//                 </Col>
-//             </Row>
-//         </ListGroup.Item>
-
-//         <ListGroup.Item>
-//             <Row>
-//                 <Col>Status:</Col>
-//                 <Col>
-//                     {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
-//                 </Col>
-//             </Row>
-//         </ListGroup.Item>
-
-//         {product.countInStock > 0 && (
-//             <ListGroup.Item>
-//                 <Row>
-//                     <Col>Qty</Col>
-//                     <Col>
-//                         <Form.Control
-//                             as='select'
-//                             value={qty}
-//                             onChange={(e) => setQty(e.target.value)}
-//                         >
-//                             {[...Array(product.countInStock).keys()].map(
-//                                 (x) => (
-//                                     <option key={x + 1} value={x + 1}>
-//                                         {x + 1}
-//                                     </option>
-//                                 )
-//                             )}
-//                         </Form.Control>
-//                     </Col>
-//                 </Row>
-//             </ListGroup.Item>
-//         )}
-
-//         <ListGroup.Item>
-//             <Button
-//                 onClick={addToCartHandler}
-//                 className='btn-block'
-//                 type='button'
-//                 disabled={product.countInStock === 0}
-//             >
-//                 Add To Cart
-//             </Button>
-//         </ListGroup.Item>
-//     </ListGroup>
-// </Card>

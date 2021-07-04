@@ -12,7 +12,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { useDispatch } from 'react-redux';
 import useStyles from './styles';
 import CartItems from './CartItems';
@@ -35,9 +35,9 @@ const Cart = () => {
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          <CameraIcon className={classes.icon} />
+          <ShoppingCartIcon className={classes.icon} />
           <Typography variant="h6" color="inherit" noWrap>
-            Album layout
+            Your Cart
           </Typography>
         </Toolbar>
       </AppBar>
@@ -48,6 +48,14 @@ const Cart = () => {
           <CartItems setCurrentId={setCurrentId} />
         </Container>
       </main>
+      <footer className={classes.footer}>
+        <Typography variant="h6" align="center" gutterBottom>
+          Total:
+        </Typography>
+        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+686.90 $
+        </Typography>
+      </footer>
     </React.Fragment>
   )
 }

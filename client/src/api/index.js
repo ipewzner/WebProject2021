@@ -19,7 +19,7 @@ export const forgetPassword = (formData) => API.post("/users/forgetPassword", fo
 export const fetchProducts = () => API.get('/products');
 export const createProduct = (newPost) => API.post('/posts', newPost);
 export const updateProduct = (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost);
-export const deleteProduct = (id) => API.delete(`/posts/${id}`);
+export const deleteProduct = (id) => API.delete(`/products/${id}`);
 export const likeProduct = (id) => API.patch(`/posts/${id}/likePost`);
 
 export const fetchCartProducts = (user) => API.get(`/cart/${user}/products`);
