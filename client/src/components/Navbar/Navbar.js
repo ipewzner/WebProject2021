@@ -36,15 +36,16 @@ export default function Navbar() {
                 <img className={classes.image} src={memories} alt="" height="60" />
             </div>
             <Toolbar className={classes.toolbar}>
-                <Button component={Link} to="/about" variant="contained" color="primary">About</Button>
-                {user?.result && (
+               {/*  <Button component={Link} to="/about" variant="contained" color="primary">About</Button>
+              */} 
+               {user?.result && (
                     <>
                         <Button component={Link} to="/chat" variant="contained" color="primary">Chat</Button>
                         <Button component={Link} to="/store" variant="contained" color="primary">store</Button>
                         <Button component={Link} to="/blogs" variant="contained" color="primary">Blogs</Button>
-                        <Button component={Link} to="/Users" variant="contained" color="primary">Users</Button>
-                        <Button component={Link} to="/cart" variant="contained" color="primary">Cart</Button>
-
+                        {user.result.type=='admin' && ( <Button component={Link} to="/Users" variant="contained" color="primary">Users</Button>)}
+                       <Button component={Link} to="/cart" variant="contained" color="primary">Cart</Button>
+                
                     </>)}
             </Toolbar>
             {user?.result ? (
