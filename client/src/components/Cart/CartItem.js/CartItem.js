@@ -11,9 +11,9 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { addToCart } from '../../../actions/cart';
+import { removeFromCart } from '../../../actions/cart';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,17 +42,12 @@ const CartItem = ({ item, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [expanded, setExpanded] = React.useState(false);
-    // console.log(JSON.parse(localStorage.getItem('profile')));
-    const user = JSON.parse(localStorage.getItem('profile')).newUser._id;
-    // console.log(user);
-
-    const handleExpandClick = () => {
-      setExpanded(!expanded);
-    };
+    const profile = JSON.parse(localStorage.getItem('profile'));
+    const user = profile.newUser ? profile.newUser._id : profile.result._id;
   
-    const handleAddClick = () => {
+    const handleRemoveClick = () => {
       // console.log(user + '\n' + item._id);
-      addToCart(user, item._id);
+      removeFromCart(user, item._id);
     };
 
     return (
@@ -72,18 +67,8 @@ const CartItem = ({ item, setCurrentId }) => {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to shopping cart" onClick={handleAddClick}>
-            <AddShoppingCartIcon />
-          </IconButton>
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
+          <IconButton aria-label="remove from cart" onClick={handleRemoveClick}>
+            <RemoveShoppingCartIcon />
           </IconButton>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>

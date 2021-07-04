@@ -23,7 +23,8 @@ const Cart = () => {
 
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
-  const userId = JSON.parse(localStorage.getItem('profile')).newUser._id;
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  const userId = profile.newUser ? profile.newUser._id : profile.result._id;
 
   useEffect(() => {
     dispatch(getCartProducts(userId));

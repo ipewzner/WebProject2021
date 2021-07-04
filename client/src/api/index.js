@@ -24,3 +24,4 @@ export const likeProduct = (id) => API.patch(`/posts/${id}/likePost`);
 
 export const fetchCartProducts = (user) => API.get(`/cart/${user}/products`);
 export const addToCart = (user, id) => API.post(`/cart/${user}/${id}`);
+export const removeFromCart = (user, id) => API.delete(`/cart/${user}/${id}`);

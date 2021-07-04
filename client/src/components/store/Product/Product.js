@@ -44,9 +44,9 @@ const Product = ({ product, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [expanded, setExpanded] = React.useState(false);
-    // console.log(JSON.parse(localStorage.getItem('profile')));
-    const user = JSON.parse(localStorage.getItem('profile')).newUser._id;
-    // console.log(user);
+    
+    const profile = JSON.parse(localStorage.getItem('profile'));
+    const user = profile.newUser ? profile.newUser._id : profile.result._id;
 
     const handleExpandClick = () => {
       setExpanded(!expanded);

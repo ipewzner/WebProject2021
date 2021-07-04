@@ -26,15 +26,26 @@ const getCartProducts = asyncHandler(async (req, res) => {
 
   const addToCart = asyncHandler(async (req, res) => {
     try {
-      console.log(req.params.user);
       const cart = await ShoppingCart.findOne({user: req.params.user});
-      console.log(cart);
       const product = await Product.findById(req.params.id);
-      console.log(product);
 
       cart.products.push(product);
       cart.save();
-      console.log("pushed maybe.....................");
+      res.status(200).json(cart.products);
+    } catch (err) {
+      console.log(err);
+      res.status(404).json({ message: err.message });
+    }
+  })
+
+
+  const removeFromCart = asyncHandler(async (req, res) => {
+    try {
+      const cart = await ShoppingCart.findOne({user: req.params.user});
+      const product = await Product.findById(req.params.id);
+
+      cart.products.pull(product);
+      cart.save();
       res.status(200).json(cart.products);
     } catch (err) {
       console.log(err);
@@ -56,5 +67,6 @@ export {
     getCart,
     createCart,
     getCartProducts,
-    addToCart
+    addToCart,
+    removeFromCart
 }
