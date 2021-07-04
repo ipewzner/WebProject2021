@@ -37,7 +37,7 @@ export const signin = async (req, res) => {
         if (!existingUser) return res.status(404).json({ message: "User doesn't exist." });
         const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
         if (!isPasswordCorrect) return res.status(403).json({ message: "Invalid credentials." });
-        const token = await jwt.sign({ email: existingUser.email, id: existingUser._id }, secret, { expiresIn: "1h" });
+        const token = await jwt.sign({ email: existingUser.email, id: existingUser._id, type:existingUser.type }, secret, { expiresIn: "1h" });
         res.status(200).json({ result: existingUser, token })
         // res.status(200).json({ result: existingUser })
     } catch (err) { res.status(500).json({ message: 'Something went wrong.' }); }
@@ -53,10 +53,9 @@ export const signup = async (req, res) => {
         if (password != confirmPassword) return res.status(403).json({ message: "Passwords don't match." });
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        const newUser = await User.create({ email, password: hashedPassword, name: `${firstName}${lastName}` });
-        const token = jwt.sign({ email: newUser.email, id: newUser._id }, secret, { expiresIn: "1h" });
+        const newUser = await User.create({ email, password: hashedPassword, name: `${firstName}${lastName}` ,type:'client'});
+        const token = jwt.sign({ email: newUser.email, id: newUser._id ,type:newUser.type}, secret, { expiresIn: "1h" });
         res.status(200).json({ newUser, token });
-        //  res.status(200).json({ newUser });
     } catch (err) { res.status(500).json({ message: 'Something went wrong.' }); }
 }
 
@@ -101,3 +100,41 @@ export const forgetPassword = async (req, res, next) => {
         .catch((err) => { next(err); console.log("err: " + err); });
 }
 
+//------------------------------------------
+export const getUsers = async (req, res) => {
+    console.log("getUsers1");
+    try {
+        const users = await User.find();
+        console.log("getUsers "+JSON.stringify(users));
+
+        res.status(200).json(users);
+    } catch (err) {res.status(404).json({ message: err.message });}
+}
+
+export const createUser = async (req, res) => {
+    const user = req.body;
+    const newUser = new User(user);
+    try {
+        await newUser.save();
+        res.status(201).json(newUser);
+    } catch (err) {res.status(409).json({ message: err.message });}
+}
+
+export const updateUser = async (req, res) => {
+    const { id: _id } = req.params;
+    const user = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No user with that id');
+    const updateUser = await User.findByIdAndUpdate(_id, { ...user, _id }, { new: true });
+
+    res.json(updateUser);
+}
+
+export const deleteUser = async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No user with that id');
+
+    await User.findByIdAndRemove(id);
+
+    res.json({ message: 'User deleted sucssfuly' })
+}

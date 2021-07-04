@@ -3,6 +3,7 @@ import { Dialog, Button, Grid, TextField, DialogTitle, DialogContentText, Dialog
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import CloseIcon from '@material-ui/icons/Close';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import moment from 'moment';
 
 export default function AlertDialog(props) {
     const user = props.user;
@@ -34,7 +35,7 @@ export default function AlertDialog(props) {
                 name: gropeName,
                 image,
                 admin: JSON.parse(localStorage.getItem('profile')).result.email,
-                users: [],
+                users: [JSON.parse(localStorage.getItem('profile')).result.email],
                 massges: []
             });
             handleClose();

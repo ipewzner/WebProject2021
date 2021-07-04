@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { produce, immer } from 'immer';
-import { Grid, CardContent, Container, Hidden, Avatar, Paper, Typography, List, ListItem, ListItemText, Chip, Button, TextField } from '@material-ui/core';
+import { Grid, Switch, CardContent, Container, Hidden, Avatar, Paper, Typography, List, ListItem, ListItemText, Chip, Button, TextField } from '@material-ui/core';
 import NewGroupForm from './newGroupForm/newGroupForm.js';
 import InfoPopup from './infoPopup.js';
 import SearchIcon from '@material-ui/icons/Search';
@@ -14,6 +14,7 @@ import Message from './Message/Message.js';
 import NewAvatar from '../NewAvatar/NewAvatar';
 import Details from './Details/Details';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { ThumbUpAlt, ThumbDownAlt, Delete, MoreHorizontal } from '@material-ui/icons';
 
 const CONECTION_PORT = 'http://localhost:4000/';
 
@@ -41,7 +42,7 @@ export default function Dashboard() {
             methods: ["GET", "POST"],
         });
         // socketRef.current.on("connect", () => socketRef.current.emit("getRoomList"))
-        socketRef.current.on("connect", () => socketRef.current.emit("join server", user, (Data) => setRoomList(Data)));
+        socketRef.current.on("connect", () => socketRef.current.emit("join server", user.result, (Data) => setRoomList(Data)));
         socketRef.current.on("your id", id => { setYourID(id); })
         socketRef.current.on('info', (Data) => { setInfoMsg(Data); })
         socketRef.current.on('roomList', (Data) => setRoomList(Data));
@@ -77,7 +78,7 @@ export default function Dashboard() {
                                 if (details) setDetails(null);
                                 else {
                                     socketRef.current.emit('totelLikesAndDislikes', { email: user.result.email },
-                                          (data) => setDetails({ email: user.result.email, name: user.result.name, likes: data.likes, dislikes: data.dislikes }));
+                                        (data) => setDetails({ email: user.result.email, name: user.result.name, likes: data.likes, dislikes: data.dislikes }));
                                 }
                             }}>
                             <MoreVertIcon />
@@ -91,9 +92,25 @@ export default function Dashboard() {
                             {roomList.length > 0 ? roomList.map((room, i) => (
                                 <ListItem key={i} button onClick={(e) => {
                                     setRoom(roomList[i]);
-                                    socketRef.current.emit('join room', { room: roomList[i], user: user.result.email }, (Data) => addMessage(Data));
+                                    socketRef.current.emit('join room', { room: roomList[i], user: user.result }, (Data) => addMessage(Data));
                                 }}>
                                     <NewAvatar avatarFor={room}></NewAvatar>
+                                    {(user.result.type === 'admin') &&
+                                        <>
+                                            <Switch
+                                                checked={room.approved}
+                                                onChange={()=>{
+                                                    roomList[i].approved=!roomList[i].approved;
+                                                    socketRef.current.emit('room approve',{ room: roomList[i], user: user.result });
+                                                }}
+                                                name="checkedA"
+                                                inputProps={{ 'aria-label': 'secondary checkbox' }}
+                                            />
+                                            <Button size="small" color="primary" onClick={() => socketRef.current.emit('deleteRoom', { user, room },(Data) => setRoomList(Data))}>
+                                                <Delete fontSize="small" />
+                                            </Button> 
+                                            </>}
+                                       
                                 </ListItem>
                             )) : console.log("roomList empty")
                             }

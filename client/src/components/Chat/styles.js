@@ -13,6 +13,8 @@ export default makeStyles((theme) => ({
     width: '30%',
     height: '300px',
     borderRight: '1px solid gray',
+    overflowY: 'scroll'
+
   },
   chatWindow: {
     width: '70%',

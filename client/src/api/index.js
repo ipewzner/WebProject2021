@@ -28,3 +28,8 @@ export const updateProdect= (id, updatedPost) => API.patch(`/posts/${id}`, updat
 export const deleteProdect= (id) => API.delete(`/posts/${id}`);
 export const likeProdect =(id) => API.patch(`/posts/${id}/likePost`);
 
+
+export const fetchUsers = () => API.get('/users');
+export const createUser = (newUser) => API.post('/users', newUser);
+export const updateUser = (id, updatedUser) => API.patch(`/users/${id}`, updatedUser);
+export const deleteUser = (id) => API.delete(`/users/${id}`);

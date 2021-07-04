@@ -1,5 +1,5 @@
-import React  from 'react';
-import { Container} from '@material-ui/core';
+import React from 'react';
+import { Container } from '@material-ui/core';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar/Navbar';
@@ -9,23 +9,23 @@ import About from './components/About/About';
 import store from './components/store/store';
 import Blogs from './components/Blogs/Blogs';
 import Chat from './components/Chat/Chat';
-import Grops from './components/Grops/Grops';
- 
+import Users from './components/Users/Users';
+
 
 const App = () => {
 
     return (
-        <BrowserRouter>    
+        <BrowserRouter>
             <Container maxWidth='lg'>
-            <Navbar />
+                <Navbar />
                 <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/chat" exact component={Chat} />
-                <Route path="/about" exact component={About} />
-                <Route path="/auth" exact component={Auth} />
-                <Route path="/store" exact component={store} />
-                <Route path="/blogs" exact component={Blogs} />
-                <Route path="/Grops" exact component={Grops} />
+                    <Route path="/" exact component={Home} />
+                    <Route path="/about" exact component={About} />
+                    <Route path="/chat" exact component={Chat} />
+                    <Route path="/auth" exact component={Auth} />
+                    <Route path="/store" exact component={store} />
+                    <Route path="/blogs" exact component={Blogs} />
+                    <Route path="/Users" exact component={Users} />
                 </Switch>
             </Container>
         </BrowserRouter>
