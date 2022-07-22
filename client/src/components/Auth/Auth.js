@@ -96,7 +96,7 @@ export default function Auth() {
 
                     <label hidden={mode == 'forgetPassword' ||mode == 'SignUp'|| mode == 'resetPassword'}>
                         <GoogleLogin
-                            clientId="702271930565-uuumi1db19csujberefugrq67t2eb6g7.apps.googleusercontent.com"
+                            clientId="INSERT YOU'R ID"
                             render={(renderProps) => (
                                 <Button
                                     className={classes.googleFacebookButton}
@@ -112,7 +112,7 @@ export default function Auth() {
                             cookiePolicy="single_host_origin"
                         />
                         <FacebookLogin
-                            appId="161620452646096"
+                            appId="INSERT YOU'R ID"
                             autoLoad={false}
                             fields="name,email,picture"
                             callback={responseFacebook}
